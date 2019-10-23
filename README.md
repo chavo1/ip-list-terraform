@@ -3,55 +3,65 @@
 ### Requirements 
 - Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - Install [Terraform](https://www.terraform.io/downloads.html)
-- Start project
-    
+- Prepare your [Azure credentials](https://www.terraform.io/docs/providers/azurerm/auth/service_principal_client_secret.html)
+- Start project 
 ```
 git clone https://github.com/chavo1/ip-list-terraform.git
 cd ip-list-terraform
 terraform init
 terraform apply
 ```
-- The result should be as follow:
+- The the firewall rules that will be created:
 
 ```
-null_resource.firewall[1]: Creating...
-null_resource.firewall[4]: Creating...
-null_resource.firewall[2]: Creating...
-null_resource.firewall[0]: Creating...
-null_resource.firewall[3]: Creating...
-null_resource.firewall[2]: Provisioning with 'local-exec'...
-null_resource.firewall[0]: Provisioning with 'local-exec'...
-null_resource.firewall[3]: Provisioning with 'local-exec'...
-null_resource.firewall[1]: Provisioning with 'local-exec'...
-null_resource.firewall[4]: Provisioning with 'local-exec'...
-null_resource.firewall[3] (local-exec): Executing: ["/bin/sh" "-c" "echo 'start 3: 192.168.0.4'"]
-null_resource.firewall[4] (local-exec): Executing: ["/bin/sh" "-c" "echo 'start 4: 192.168.0.5'"]
-null_resource.firewall[0] (local-exec): Executing: ["/bin/sh" "-c" "echo 'start 0:192.168.0.1'"]
-null_resource.firewall[1] (local-exec): Executing: ["/bin/sh" "-c" "echo 'start 1: 192.168.0.2'"]
-null_resource.firewall[2] (local-exec): Executing: ["/bin/sh" "-c" "echo 'start 2: 192.168.0.3'"]
-null_resource.firewall[0] (local-exec): start 0:192.168.0.1
-null_resource.firewall[0]: Provisioning with 'local-exec'...
-null_resource.firewall[0] (local-exec): Executing: ["/bin/sh" "-c" "echo 'end 0:192.168.0.6'"]
-null_resource.firewall[0] (local-exec): end 0:192.168.0.6
-null_resource.firewall[0]: Creation complete after 0s [id=8049747826391496115]
-null_resource.firewall[2] (local-exec): start 2: 192.168.0.3
-null_resource.firewall[3] (local-exec): start 3: 192.168.0.4
-null_resource.firewall[3]: Provisioning with 'local-exec'...
-null_resource.firewall[2]: Provisioning with 'local-exec'...
-null_resource.firewall[3] (local-exec): Executing: ["/bin/sh" "-c" "echo 'end 3: 192.168.0.9'"]
-null_resource.firewall[2] (local-exec): Executing: ["/bin/sh" "-c" "echo 'end 2: 192.168.0.8'"]
-null_resource.firewall[4] (local-exec): start 4: 192.168.0.5
-null_resource.firewall[1] (local-exec): start 1: 192.168.0.2
-null_resource.firewall[4]: Provisioning with 'local-exec'...
-null_resource.firewall[1]: Provisioning with 'local-exec'...
-null_resource.firewall[4] (local-exec): Executing: ["/bin/sh" "-c" "echo 'end 4: 192.168.0.10'"]
-null_resource.firewall[1] (local-exec): Executing: ["/bin/sh" "-c" "echo 'end 1: 192.168.0.7'"]
-null_resource.firewall[3] (local-exec): end 3: 192.168.0.9
-null_resource.firewall[3]: Creation complete after 1s [id=2640313777702243260]
-null_resource.firewall[2] (local-exec): end 2: 192.168.0.8
-null_resource.firewall[4] (local-exec): end 4: 192.168.0.10
-null_resource.firewall[1] (local-exec): end 1: 192.168.0.7
-null_resource.firewall[1]: Creation complete after 1s [id=8936153394032017215]
-null_resource.firewall[4]: Creation complete after 1s [id=8481782813767202757]
-null_resource.firewall[2]: Creation complete after 1s [id=7229860564918906860]
+# azurerm_sql_firewall_rule.firewallrule[0] will be created
+  + resource "azurerm_sql_firewall_rule" "firewallrule" {
+      + end_ip_address      = "192.168.0.6"
+      + id                  = (known after apply)
+      + name                = "firewallrule-0"
+      + resource_group_name = "tf-chavo-resources"
+      + server_name         = "mysqlserverchavo"
+      + start_ip_address    = "192.168.0.1"
+    }
+
+  # azurerm_sql_firewall_rule.firewallrule[1] will be created
+  + resource "azurerm_sql_firewall_rule" "firewallrule" {
+      + end_ip_address      = "192.168.0.7"
+      + id                  = (known after apply)
+      + name                = "firewallrule-1"
+      + resource_group_name = "tf-chavo-resources"
+      + server_name         = "mysqlserverchavo"
+      + start_ip_address    = "192.168.0.2"
+    }
+
+  # azurerm_sql_firewall_rule.firewallrule[2] will be created
+  + resource "azurerm_sql_firewall_rule" "firewallrule" {
+      + end_ip_address      = "192.168.0.8"
+      + id                  = (known after apply)
+      + name                = "firewallrule-2"
+      + resource_group_name = "tf-chavo-resources"
+      + server_name         = "mysqlserverchavo"
+      + start_ip_address    = "192.168.0.3"
+    }
+
+  # azurerm_sql_firewall_rule.firewallrule[3] will be created
+  + resource "azurerm_sql_firewall_rule" "firewallrule" {
+      + end_ip_address      = "192.168.0.9"
+      + id                  = (known after apply)
+      + name                = "firewallrule-3"
+      + resource_group_name = "tf-chavo-resources"
+      + server_name         = "mysqlserverchavo"
+      + start_ip_address    = "192.168.0.4"
+    }
+
+  # azurerm_sql_firewall_rule.firewallrule[4] will be created
+  + resource "azurerm_sql_firewall_rule" "firewallrule" {
+      + end_ip_address      = "192.168.0.10"
+      + id                  = (known after apply)
+      + name                = "firewallrule-4"
+      + resource_group_name = "tf-chavo-resources"
+      + server_name         = "mysqlserverchavo"
+      + start_ip_address    = "192.168.0.5"
+    }
+
 ```
