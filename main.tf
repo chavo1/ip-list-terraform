@@ -1,15 +1,34 @@
-resource "null_resource" "firewall" {
-  count = length(local.ip_list_start) // this will iterate the length of the "ip_list_start" list and count here is 5
-
-  provisioner "local-exec" {
-    command = "echo 'start ${count.index}:${local.ip_list_start[count.index]}'" // this will display The position and assigned IP for the start list
-  }
-  provisioner "local-exec" {
-    command = "echo 'end ${count.index}:${local.ip_list_end[count.index]}'" // this will display The position and assigned IP for the end list
-  }
+variable "prefix" {
+  default = "tf-chavo"
 }
-// Here we define the lists that should be iterated 
-locals {
-  ip_list_start = split(",", file("start_ip.txt"))
-  ip_list_end   = split(",", file("end_ip.txt"))
+
+resource "azurerm_resource_group" "main-chavo" {
+  name     = "${var.prefix}-resources"
+  location = "West US 2"
+}
+
+resource "azurerm_virtual_network" "main-chavo" {
+  name                = "${var.prefix}-network"
+  address_space       = ["10.0.0.0/16"]
+  location            = "${azurerm_resource_group.main-chavo.location}"
+  resource_group_name = "${azurerm_resource_group.main-chavo.name}"
+}
+
+resource "azurerm_subnet" "internal" {
+  name                 = "internal"
+  resource_group_name  = "${azurerm_resource_group.main-chavo.name}"
+  virtual_network_name = "${azurerm_virtual_network.main-chavo.name}"
+  address_prefix       = "10.0.2.0/24"
+}
+
+resource "azurerm_network_interface" "main-chavo" {
+  name                = "${var.prefix}-nic"
+  location            = "${azurerm_resource_group.main-chavo.location}"
+  resource_group_name = "${azurerm_resource_group.main-chavo.name}"
+
+  ip_configuration {
+    name                          = "testconfiguration1"
+    subnet_id                     = "${azurerm_subnet.internal.id}"
+    private_ip_address_allocation = "Dynamic"
+  }
 }
